@@ -19,14 +19,17 @@ public class ClickFlag : MonoBehaviour {
     // klik na plochu Slovenska
     private void OnMouseDown()
     {
-        if (!ControlMap.locked)
+        if (ControlMap.Startgame)
         {
-            target.SetActive(true);
-            activePuk = true;
-            // Vector3 mousePos = Camera.main.ScreenToViewportPoint(Input.mousePosition);
-            Vector2 mousepos2D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            target.transform.position = new Vector2(mousepos2D.x, mousepos2D.y);
-           // Debug.Log(mousepos2D);
+            if (!ControlMap.locked)
+            {
+                target.SetActive(true);
+                activePuk = true;
+                // Vector3 mousePos = Camera.main.ScreenToViewportPoint(Input.mousePosition);
+                Vector2 mousepos2D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                target.transform.position = new Vector2(mousepos2D.x, mousepos2D.y);
+                // Debug.Log(mousepos2D);
+            }
         }
     }
 }

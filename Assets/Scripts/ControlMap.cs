@@ -8,7 +8,7 @@ public class ControlMap : MonoBehaviour {
 
     //public LayerMask clickMask;
     public static bool locked = false;
-    public static bool Startgame= false;
+    public static bool Startgame = false;
     private  bool loopTimer = false;
     [SerializeField]
     private GameObject WinOrNotText;
@@ -35,13 +35,14 @@ public class ControlMap : MonoBehaviour {
         {
             if (looptime > 0.0f)
             {
-                timer -= Time.deltaTime;
+                looptime -= Time.deltaTime;
             }
             else
             {
                 looptime = 0.0f;
                 loopTimer = false;
                 POmocnaUnlock = 1;
+                //Debug.Log("Som tu" + POmocnaUnlock);
             }
         }
         else
@@ -72,7 +73,9 @@ public class ControlMap : MonoBehaviour {
                             Mathf.Abs(GameObject.Find("Target").transform.position.y - GameObject.Find("TargetPlace").transform.position.y) <= 1.1f)
                         {
                             //Debug.Log("Trafil si. :)");
+                            
                             WinOrNotText.GetComponentInChildren<TextMeshProUGUI>().text = "Trafil si. Dobra praca chlope. :D";
+                            WinOrNotText.SetActive(true);
                             loopTimer = true;
                             if (POmocnaUnlock == 1)
                             {
@@ -83,8 +86,9 @@ public class ControlMap : MonoBehaviour {
                         }
                         else
                         {
-
+                            
                             WinOrNotText.GetComponentInChildren<TextMeshProUGUI>().text = "Netrafil si. Vyskusame este raz. :)";
+                            WinOrNotText.SetActive(true);
                             loopTimer = true;
                             if (POmocnaUnlock == 1)
                             {
@@ -103,9 +107,9 @@ public class ControlMap : MonoBehaviour {
                         loopTimer = true;
                         if (POmocnaUnlock == 1)
                         {
+                            timer = settime;
                             locked = false;
                             Startgame = false;
-                            POmocnaUnlock = 0;
                             SceneManager.LoadScene("Mapa");
                         }
                     }
@@ -115,19 +119,24 @@ public class ControlMap : MonoBehaviour {
             else
             {
                 int sekundy;
-                if (timerAnimation > 0.0f)
+                if (timerAnimation > 1f)
                 {
                     timerAnimation -= Time.deltaTime;
                     sekundy = (int)timerAnimation % 60;
                     GameObject.Find("Textanimation").GetComponentInChildren<TextMeshProUGUI>().text = sekundy.ToString();
                 }
+                else if (timerAnimation > 0.0f)
+                {
+                    timerAnimation -= Time.deltaTime;
+                    GameObject.Find("Textanimation").GetComponentInChildren<TextMeshProUGUI>().text = "GO";
+                }
                 else
                 {
-                    timerAnimation = 0;
-                    GameObject.Find("Textanimation").GetComponentInChildren<TextMeshProUGUI>().text = timerAnimation.ToString();
+                    timerAnimation = 0.0f;
                     Startgame = true;
-                    CountDownAnimation.gameObject.GetComponent<Animator>().enabled = false;
                     GameObject.Find("Textanimation").GetComponentInChildren<TextMeshProUGUI>().enabled = false;
+                    CountDownAnimation.gameObject.GetComponent<Animator>().enabled = false;
+                    
                 }
             }
         } 
