@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class ControlMap : MonoBehaviour {
 
@@ -44,11 +45,17 @@ public class ControlMap : MonoBehaviour {
             Mathf.Abs(GameObject.Find("Target").transform.position.y - GameObject.Find("TargetPlace").transform.position.y) <= 1.1f)
             {
                 Debug.Log("Trafil si. :)");
-               
+                puzzlepeace.pocet = 0;
+                puzzlepeace.RandomPomocnePole = new List<int>(new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 });
+                SceneManager.LoadScene("MainMenu");
+
             }
             else
             {
                 Debug.Log("Netrafil si. :(");
+                timer = settime;
+                locked = false;
+                SceneManager.LoadScene("Mapa");
             }
         }
     }
