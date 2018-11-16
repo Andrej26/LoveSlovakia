@@ -123,7 +123,7 @@ public class GameControl : MonoBehaviour {
     private void RandomPoleMoznosti()
     {
         int randpozicia = RandomPozicia[Random.Range(0, RandomPozicia.Count)];
-        int randnazov = Random.Range(0, MainMenu.PuzzleVyber.Length / 2);
+        int randnazov = Random.Range(0, MainMenu.PuzzleVyber.Length / 4);
 
         if (RandomPozicia.Count.Equals(3))
         {

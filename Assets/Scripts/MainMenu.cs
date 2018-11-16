@@ -7,13 +7,13 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour {
 
-    public static string[,] PuzzleVyber = new string[,] { { "Nitra", "0" }, { "Bojnice", "0" },{"Nieco", "0" } };
-   // private static int count=0;
+    public static string[,] PuzzleVyber = new string[3,4];
+    private static int count=0;
 
 
     public void Start()
     {
-        ZapisDoSuboru();
+       // ZapisDoSuboru();
         NacitanieZoSuboru();
     }
 
@@ -26,13 +26,14 @@ public class MainMenu : MonoBehaviour {
 
     public void QuiteGame()
     {
+        ZapisDoSuboru();
         Application.Quit();
     }
 
     // random vyber mesta, ktore este nebolo
     private void Vyber()
     {
-        int rand = UnityEngine.Random.Range(0, PuzzleVyber.Length/2);
+        int rand = UnityEngine.Random.Range(0, PuzzleVyber.Length/4);
         // Debug.Log(PuzzleVyber.Length);
         if (PuzzleVyber[rand, 1].Equals("0"))
         {
@@ -45,7 +46,6 @@ public class MainMenu : MonoBehaviour {
         }
         //Debug.Log(rand);
         //Debug.Log(PuzzleVyber[rand, 0]);
-
     }
 
     // upload suboru 
@@ -58,15 +58,12 @@ public class MainMenu : MonoBehaviour {
 
            //Write some text to the test.txt file
             StreamWriter writer = new StreamWriter(path, true);
-            string celabunka = "Test" + ",0" + ",10" + ",2";
-            writer.WriteLine(celabunka);
-            // ++count;
-            celabunka = "Test" + ",1" + ",20" + ",8";
-            writer.WriteLine(celabunka);
-            //  ++count;
-            celabunka = "Test" + ",2" + ",30" + ",5";
-            writer.WriteLine(celabunka);
-            // ++count;
+           
+            for (int i=0;i<count;i++)
+            {
+                string celyriadok = PuzzleVyber[i, 0] + "," + PuzzleVyber[i, 1] + "," + PuzzleVyber[i, 2] + "," + PuzzleVyber[i, 3];
+                writer.WriteLine(celyriadok);
+            }
             writer.Close();
         }
         catch (Exception e)
@@ -96,8 +93,15 @@ public class MainMenu : MonoBehaviour {
                     // deliniators, then send that array to DoStuff()
                     string[] entries = line.Split(',');
                     if (entries.Length > 0)
-                        Debug.Log(entries);
-                    Debug.Log(line);
+                    {
+                        PuzzleVyber[count, 0] = entries[0];
+                        PuzzleVyber[count, 1] = entries[1];
+                        PuzzleVyber[count, 2] = entries[2];
+                        PuzzleVyber[count, 3] = entries[3];
+                        count++;
+                        //Debug.Log(entries[0] +",,,"+ entries[1] +",,,"+ entries[2] +",,,"+ entries[3]);
+                        //Debug.Log(line);
+                    }
                 }
             }
             while (line != null);
