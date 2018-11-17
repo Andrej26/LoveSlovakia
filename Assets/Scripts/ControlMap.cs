@@ -7,9 +7,11 @@ using UnityEngine.SceneManagement;
 public class ControlMap : MonoBehaviour {
 
     //public LayerMask clickMask;
-    public static bool locked = false;
-    public static bool Startgame = false;
-    private  bool loopTimer = false;
+    public static bool locked = false;   // zamknuta dovtedy, kym neuplinie časovač
+    public static bool Startgame = false;  // premenná je zatvorená (false), kým plinie CountDownAnimácia
+    private  bool loopTimer = false;   // premenná pre COuntDown animáciu
+    [SerializeField]
+    private GameObject Otazka;
     [SerializeField]
     private GameObject WinOrNotText;
     [SerializeField]
@@ -17,8 +19,9 @@ public class ControlMap : MonoBehaviour {
     [SerializeField]
     private GameObject countDown;
     [SerializeField]
-    private float settime, timer, timerAnimation, looptime;
-    private int POmocnaUnlock = 0;
+    private float settime;
+    private float timer, timerAnimation, looptime;
+    private int POmocnaUnlock = 0;   //pomocna premenná pri presmerovaní na inú scénu alebo tú istú(reload)
 
     // Use this for initialization
     void Start()
@@ -26,11 +29,13 @@ public class ControlMap : MonoBehaviour {
         timer = settime;
         timerAnimation = 6;
         WinOrNotText.SetActive(false);
+        Otazka.SetActive(false);
         looptime = 5;
     }
 
     void Update()
     {
+        /*--------------------------------------Sekcia_5_sek_počkania----------------------------------------*/
         if (loopTimer)
         {
             if (looptime > 0.0f)
@@ -45,10 +50,16 @@ public class ControlMap : MonoBehaviour {
                 //Debug.Log("Som tu" + POmocnaUnlock);
             }
         }
+        /*---------------------------------------------------------------------------------------------------*/
         else
         {
+            /*--------------------------------------Sekcia_Hra-----------------------------------------*/
             if (Startgame)
             {
+
+                Otazka.SetActive(true);
+                Otazka.GetComponentInChildren<TextMeshProUGUI>().text = "Kde lezi mesto " + ControlPuzzle.Cesta;
+
                 //odpocet do položenia puku
                 if (timer > 0.0f)
                 {
@@ -65,7 +76,7 @@ public class ControlMap : MonoBehaviour {
                 //keď už bol položený,tak sa zobrazí pravé miesto a zistíme či sa prekrýva alebo nie :)
                 if (locked)
                 {
-                    if (ClickFlag.activePuk)
+                    if (ClickFlag.activePuk) //kontrola či som položil nejaký puk
                     {
                         GameObject.Find("TargetPlace").GetComponent<Renderer>().enabled = true;
 
@@ -73,7 +84,6 @@ public class ControlMap : MonoBehaviour {
                             Mathf.Abs(GameObject.Find("Target").transform.position.y - GameObject.Find("TargetPlace").transform.position.y) <= 1.1f)
                         {
                             //Debug.Log("Trafil si. :)");
-                            
                             WinOrNotText.GetComponentInChildren<TextMeshProUGUI>().text = "Trafil si. Dobra praca chlope. :D";
                             WinOrNotText.SetActive(true);
                             loopTimer = true;
@@ -84,15 +94,13 @@ public class ControlMap : MonoBehaviour {
                                 SceneManager.LoadScene("MainMenu");
                             }   
                         }
-                        else
-                        {
-                            
+                        else 
+                        {    
                             WinOrNotText.GetComponentInChildren<TextMeshProUGUI>().text = "Netrafil si. Vyskusame este raz. :)";
                             WinOrNotText.SetActive(true);
                             loopTimer = true;
                             if (POmocnaUnlock == 1)
                             {
-                                timer = settime;
                                 locked = false;
                                 Startgame = false;
                                 SceneManager.LoadScene("Mapa");
@@ -100,14 +108,13 @@ public class ControlMap : MonoBehaviour {
                             //Debug.Log("Netrafil si. :(");
                         }
                     }
-                    else
+                    else   // ak som nepoložil puk tak sa všetko reštartuje odznova o 5 sek.
                     {
                         WinOrNotText.GetComponentInChildren<TextMeshProUGUI>().text = "Nestihol si nic oznacit. Tak to skusime este raz. ;)";
                         WinOrNotText.SetActive(true);
                         loopTimer = true;
                         if (POmocnaUnlock == 1)
                         {
-                            timer = settime;
                             locked = false;
                             Startgame = false;
                             SceneManager.LoadScene("Mapa");
@@ -116,10 +123,10 @@ public class ControlMap : MonoBehaviour {
                 }
                 
             }
-            else
+            else // tu sa generuje CountDownAnimation, ktorá sa spustí hneď pred začatím hry
             {
                 int sekundy;
-                if (timerAnimation > 1f)
+                if (timerAnimation > 1.0f)
                 {
                     timerAnimation -= Time.deltaTime;
                     sekundy = (int)timerAnimation % 60;
@@ -134,11 +141,13 @@ public class ControlMap : MonoBehaviour {
                 {
                     timerAnimation = 0.0f;
                     Startgame = true;
-                    GameObject.Find("Textanimation").GetComponentInChildren<TextMeshProUGUI>().enabled = false;
-                    CountDownAnimation.gameObject.GetComponent<Animator>().enabled = false;
+                    GameObject.Find("Textanimation").GetComponentInChildren<TextMeshProUGUI>().enabled = false; // zneviditelny objekt
+                    CountDownAnimation.gameObject.GetComponent<Animator>().enabled = false;  // zastavy animator v animovani
                     
                 }
+               // Debug.Log(timerAnimation);
             }
-        } 
+            /*----------------------------------------------------------------------------------------*/
+        }
     }
 }

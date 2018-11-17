@@ -20,7 +20,7 @@ public class puzzlepeace : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-        Sprite_array = Resources.LoadAll<Sprite>(GameControl.Cesta); // nacitanie vsetkych assetov z vybraneho priecinku
+        Sprite_array = Resources.LoadAll<Sprite>(ControlPuzzle.Cesta); // nacitanie vsetkych assetov z vybraneho priecinku
         PuzzleArray = new string[2,20];
         NaplnPuzzleArray();
         RandPuzzleSpawn();

@@ -37,7 +37,7 @@ public class MainMenu : MonoBehaviour {
         // Debug.Log(PuzzleVyber.Length);
         if (PuzzleVyber[rand, 1].Equals("0"))
         {
-            GameControl.Cesta = PuzzleVyber[rand, 0];
+            ControlPuzzle.Cesta = PuzzleVyber[rand, 0];
             PuzzleVyber[rand, 1] = "1";
         }     
         else
