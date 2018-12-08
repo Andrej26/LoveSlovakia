@@ -9,18 +9,21 @@ public class MainMenu : MonoBehaviour {
 
     public static string[,] PuzzleVyber = new string[3,4];
     private static int count=0;
+    public Animator transitionAnim;
 
 
     public void Start()
     {
        // ZapisDoSuboru();
         NacitanieZoSuboru();
+        StartCoroutine(NacitajScenu());
     }
 
 
     public void PLayGame()
     {
         Vyber();
+        StartCoroutine(NacitajScenu());
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
@@ -108,5 +111,11 @@ public class MainMenu : MonoBehaviour {
             reader.Close();
         }
         
+    }
+
+    IEnumerator NacitajScenu()
+    {
+        transitionAnim.SetTrigger("end");
+        yield return new WaitForSeconds(3f);
     }
 }
