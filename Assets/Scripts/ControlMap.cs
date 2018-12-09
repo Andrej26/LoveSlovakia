@@ -22,6 +22,7 @@ public class ControlMap : MonoBehaviour {
     private float settime;
     private float timer, timerAnimation, looptime;
     private int POmocnaUnlock = 0;   //pomocna premenná pri presmerovaní na inú scénu alebo tú istú(reload)
+    public Animator transitionAnim;
 
     // Use this for initialization
     void Start()
@@ -30,7 +31,7 @@ public class ControlMap : MonoBehaviour {
         timerAnimation = 6;
         WinOrNotText.SetActive(false);
         Otazka.SetActive(false);
-        looptime = 5;
+        looptime = 2; // velkost prestavky
     }
 
     void Update()
@@ -54,100 +55,119 @@ public class ControlMap : MonoBehaviour {
         else
         {
             /*--------------------------------------Sekcia_Hra-----------------------------------------*/
-            if (Startgame)
+            StartCoroutine(PlayGame());
+            /*----------------------------------------------------------------------------------------*/
+        }
+    }
+
+    IEnumerator NacitajMapu()
+    {
+        transitionAnim.SetTrigger("Clouds");
+        yield return new WaitForSeconds(3.5f);
+        SceneManager.LoadScene("Mapa");
+    }
+
+    IEnumerator NacitajMainMenu()
+    {
+        transitionAnim.SetTrigger("Clouds");
+        yield return new WaitForSeconds(3.5f);
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    IEnumerator PlayGame()
+    {
+        yield return new WaitForSeconds(4f); // zdrzanie kodu na 3.5 sekundy
+        if (Startgame)
+        {
+            Otazka.SetActive(true);
+            Otazka.GetComponentInChildren<TextMeshProUGUI>().text = "Kde lezi mesto " + ControlPuzzle.Cesta;
+
+            //odpocet do položenia puku
+            if (timer > 0.0f)
             {
+                timer -= Time.deltaTime;
+                countDown.GetComponentInChildren<TextMeshProUGUI>().text = timer.ToString("F");
+            }
+            else
+            {
+                timer = 0.0f;
+                countDown.GetComponentInChildren<TextMeshProUGUI>().text = timer.ToString("F");
+                locked = true;
+            }
 
-                Otazka.SetActive(true);
-                Otazka.GetComponentInChildren<TextMeshProUGUI>().text = "Kde lezi mesto " + ControlPuzzle.Cesta;
+            //keď už bol položený,tak sa zobrazí pravé miesto a zistíme či sa prekrýva alebo nie :)
+            if (locked)
+            {
+                if (ClickFlag.activePuk) //kontrola či som položil nejaký puk
+                {
+                    GameObject.Find("TargetPlace").GetComponent<Renderer>().enabled = true;
 
-                //odpocet do položenia puku
-                if (timer > 0.0f)
-                {
-                    timer -= Time.deltaTime;
-                    countDown.GetComponentInChildren<TextMeshProUGUI>().text = timer.ToString("F");
-                }
-                else
-                {
-                    timer = 0.0f;
-                    countDown.GetComponentInChildren<TextMeshProUGUI>().text = timer.ToString("F");
-                    locked = true;
-                }
-
-                //keď už bol položený,tak sa zobrazí pravé miesto a zistíme či sa prekrýva alebo nie :)
-                if (locked)
-                {
-                    if (ClickFlag.activePuk) //kontrola či som položil nejaký puk
+                    if (Mathf.Abs(GameObject.Find("Target").transform.position.x - GameObject.Find("TargetPlace").transform.position.x) <= 1.1f &&
+                        Mathf.Abs(GameObject.Find("Target").transform.position.y - GameObject.Find("TargetPlace").transform.position.y) <= 1.1f)
                     {
-                        GameObject.Find("TargetPlace").GetComponent<Renderer>().enabled = true;
-
-                        if (Mathf.Abs(GameObject.Find("Target").transform.position.x - GameObject.Find("TargetPlace").transform.position.x) <= 1.1f &&
-                            Mathf.Abs(GameObject.Find("Target").transform.position.y - GameObject.Find("TargetPlace").transform.position.y) <= 1.1f)
+                        //Debug.Log("Trafil si. :)");
+                        WinOrNotText.GetComponentInChildren<TextMeshProUGUI>().text = "Trafil si. Dobra praca chlope. :D";
+                        WinOrNotText.SetActive(true);
+                        loopTimer = true;
+                        if (POmocnaUnlock == 1)
                         {
-                            //Debug.Log("Trafil si. :)");
-                            WinOrNotText.GetComponentInChildren<TextMeshProUGUI>().text = "Trafil si. Dobra praca chlope. :D";
-                            WinOrNotText.SetActive(true);
-                            loopTimer = true;
-                            if (POmocnaUnlock == 1)
-                            {
-                                puzzlepeace.pocet = 0;
-                                puzzlepeace.RandomPomocnePole = new List<int>(new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 });
-                                SceneManager.LoadScene("MainMenu");
-                            }   
-                        }
-                        else 
-                        {    
-                            WinOrNotText.GetComponentInChildren<TextMeshProUGUI>().text = "Netrafil si. Vyskusame este raz. :)";
-                            WinOrNotText.SetActive(true);
-                            loopTimer = true;
-                            if (POmocnaUnlock == 1)
-                            {
-                                locked = false;
-                                Startgame = false;
-                                SceneManager.LoadScene("Mapa");
-                            }
-                            //Debug.Log("Netrafil si. :(");
+                            puzzlepeace.pocet = 0;
+                            puzzlepeace.RandomPomocnePole = new List<int>(new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 });
+                            StartCoroutine(NacitajMainMenu());
                         }
                     }
-                    else   // ak som nepoložil puk tak sa všetko reštartuje odznova o 5 sek.
+                    else
                     {
-                        WinOrNotText.GetComponentInChildren<TextMeshProUGUI>().text = "Nestihol si nic oznacit. Tak to skusime este raz. ;)";
+                        WinOrNotText.GetComponentInChildren<TextMeshProUGUI>().text = "Netrafil si. Vyskusame este raz. :)";
                         WinOrNotText.SetActive(true);
                         loopTimer = true;
                         if (POmocnaUnlock == 1)
                         {
                             locked = false;
                             Startgame = false;
-                            SceneManager.LoadScene("Mapa");
+                            StartCoroutine(NacitajMapu());
                         }
+                        //Debug.Log("Netrafil si. :(");
                     }
                 }
-                
+                else   // ak som nepoložil puk tak sa všetko reštartuje odznova o 5 sek.
+                {
+                    WinOrNotText.GetComponentInChildren<TextMeshProUGUI>().text = "Nestihol si nic oznacit. Tak to skusime este raz. ;)";
+                    WinOrNotText.SetActive(true);
+                    loopTimer = true;
+                    if (POmocnaUnlock == 1)
+                    {
+                        locked = false;
+                        Startgame = false;
+                        StartCoroutine(NacitajMapu());
+                    }
+                }
             }
-            else // tu sa generuje CountDownAnimation, ktorá sa spustí hneď pred začatím hry
+
+        }
+        else // tu sa generuje CountDownAnimation, ktorá sa spustí hneď pred začatím hry
+        {
+            int sekundy;
+            if (timerAnimation > 1.0f)
             {
-                int sekundy;
-                if (timerAnimation > 1.0f)
-                {
-                    timerAnimation -= Time.deltaTime;
-                    sekundy = (int)timerAnimation % 60;
-                    GameObject.Find("Textanimation").GetComponentInChildren<TextMeshProUGUI>().text = sekundy.ToString();
-                }
-                else if (timerAnimation > 0.0f)
-                {
-                    timerAnimation -= Time.deltaTime;
-                    GameObject.Find("Textanimation").GetComponentInChildren<TextMeshProUGUI>().text = "GO";
-                }
-                else
-                {
-                    timerAnimation = 0.0f;
-                    Startgame = true;
-                    GameObject.Find("Textanimation").GetComponentInChildren<TextMeshProUGUI>().enabled = false; // zneviditelny objekt
-                    CountDownAnimation.gameObject.GetComponent<Animator>().enabled = false;  // zastavy animator v animovani
-                    
-                }
-               // Debug.Log(timerAnimation);
+                timerAnimation -= Time.deltaTime;
+                sekundy = (int)timerAnimation % 60;
+                GameObject.Find("Textanimation").GetComponentInChildren<TextMeshProUGUI>().text = sekundy.ToString();
             }
-            /*----------------------------------------------------------------------------------------*/
+            else if (timerAnimation > 0.0f)
+            {
+                timerAnimation -= Time.deltaTime;
+                GameObject.Find("Textanimation").GetComponentInChildren<TextMeshProUGUI>().text = "GO";
+            }
+            else
+            {
+                timerAnimation = 0.0f;
+                Startgame = true;
+                GameObject.Find("Textanimation").GetComponentInChildren<TextMeshProUGUI>().enabled = false; // zneviditelny objekt
+                CountDownAnimation.gameObject.GetComponent<Animator>().enabled = false;  // zastavy animator v animovani
+
+            }
+            // Debug.Log(timerAnimation);
         }
     }
 }

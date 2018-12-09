@@ -21,6 +21,7 @@ public class ControlPuzzle : MonoBehaviour {
     [SerializeField]
     private GameObject moznostC;
 
+    public Animator transitionAnim;
     public static string Cesta;
     private string[] RandomMoznosti = new string[3];
     private string[] MenaButtonov = new string[3] { "MoznostA", "MoznostB", "MoznostC"};
@@ -168,7 +169,7 @@ public class ControlPuzzle : MonoBehaviour {
             wintext.GetComponent<CanvasRenderer>().SetAlpha(alpha);
             puzzlepeace.pocet = 0;
             puzzlepeace.RandomPomocnePole = new List<int>(new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 });
-            SceneManager.LoadScene("Mapa");
+            StartCoroutine(NacitajScenu());          
         }
 
         else
@@ -189,5 +190,13 @@ public class ControlPuzzle : MonoBehaviour {
         {
             moznostC.GetComponent<Image>().color = Color.red;
         }*/
+    }
+
+    //pozastavenie kodu na 3 sekundy pred prepnutim na dalsiu scenu
+    IEnumerator NacitajScenu()
+    {
+        transitionAnim.SetTrigger("Clouds");
+        yield return new WaitForSeconds(3.5f);
+        SceneManager.LoadScene("Mapa");
     }
 }

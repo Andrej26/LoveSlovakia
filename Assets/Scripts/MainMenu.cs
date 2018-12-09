@@ -16,7 +16,6 @@ public class MainMenu : MonoBehaviour {
     {
        // ZapisDoSuboru();
         NacitanieZoSuboru();
-        StartCoroutine(NacitajScenu());
     }
 
 
@@ -24,7 +23,6 @@ public class MainMenu : MonoBehaviour {
     {
         Vyber();
         StartCoroutine(NacitajScenu());
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     public void QuiteGame()
@@ -115,7 +113,8 @@ public class MainMenu : MonoBehaviour {
 
     IEnumerator NacitajScenu()
     {
-        transitionAnim.SetTrigger("end");
-        yield return new WaitForSeconds(3f);
+        transitionAnim.SetTrigger("Clouds");
+        yield return new WaitForSeconds(3.5f);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }
