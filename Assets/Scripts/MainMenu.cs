@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour {
 
     public static string[,] PuzzleVyber = new string[3,4];
-    private static int count=0;
+    public static int count=0;
     public Animator transitionAnim;
 
 
@@ -39,6 +39,8 @@ public class MainMenu : MonoBehaviour {
         if (PuzzleVyber[rand, 1].Equals("0"))
         {
             ControlPuzzle.Cesta = PuzzleVyber[rand, 0];
+            ControlMap.SuradnicaX = float.Parse(PuzzleVyber[rand , 2]);
+            ControlMap.SuradnicaY = float.Parse(PuzzleVyber[rand, 3]);
             PuzzleVyber[rand, 1] = "1";
         }     
         else
@@ -114,7 +116,7 @@ public class MainMenu : MonoBehaviour {
     IEnumerator NacitajScenu()
     {
         transitionAnim.SetTrigger("Clouds");
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(4f);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }

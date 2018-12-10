@@ -23,6 +23,10 @@ public class ControlMap : MonoBehaviour {
     private float timer, timerAnimation, looptime;
     private int POmocnaUnlock = 0;   //pomocna premenná pri presmerovaní na inú scénu alebo tú istú(reload)
     public Animator transitionAnim;
+    public static float SuradnicaX=9;
+    public static float SuradnicaY=-2;
+    public GameObject hladanemiesto;
+
 
     // Use this for initialization
     void Start()
@@ -32,6 +36,7 @@ public class ControlMap : MonoBehaviour {
         WinOrNotText.SetActive(false);
         Otazka.SetActive(false);
         looptime = 2; // velkost prestavky
+        hladanemiesto.transform.position = new Vector2(9.2f, -2.1f);
     }
 
     void Update()
@@ -63,20 +68,22 @@ public class ControlMap : MonoBehaviour {
     IEnumerator NacitajMapu()
     {
         transitionAnim.SetTrigger("Clouds");
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(4f);
+        Startgame = false;
         SceneManager.LoadScene("Mapa");
     }
 
     IEnumerator NacitajMainMenu()
     {
         transitionAnim.SetTrigger("Clouds");
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(4f);
+        ClickFlag.activePuk = false;
         SceneManager.LoadScene("MainMenu");
     }
 
     IEnumerator PlayGame()
     {
-        yield return new WaitForSeconds(4f); // zdrzanie kodu na 3.5 sekundy
+        yield return new WaitForSeconds(4); // zdrzanie kodu na 4 sekundy
         if (Startgame)
         {
             Otazka.SetActive(true);
@@ -101,6 +108,7 @@ public class ControlMap : MonoBehaviour {
                 if (ClickFlag.activePuk) //kontrola či som položil nejaký puk
                 {
                     GameObject.Find("TargetPlace").GetComponent<Renderer>().enabled = true;
+                    hladanemiesto.transform.position = new Vector2(SuradnicaX, SuradnicaY);
 
                     if (Mathf.Abs(GameObject.Find("Target").transform.position.x - GameObject.Find("TargetPlace").transform.position.x) <= 1.1f &&
                         Mathf.Abs(GameObject.Find("Target").transform.position.y - GameObject.Find("TargetPlace").transform.position.y) <= 1.1f)
@@ -113,6 +121,7 @@ public class ControlMap : MonoBehaviour {
                         {
                             puzzlepeace.pocet = 0;
                             puzzlepeace.RandomPomocnePole = new List<int>(new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 });
+                            MainMenu.count = 0;
                             StartCoroutine(NacitajMainMenu());
                         }
                     }
@@ -124,11 +133,12 @@ public class ControlMap : MonoBehaviour {
                         if (POmocnaUnlock == 1)
                         {
                             locked = false;
-                            Startgame = false;
                             StartCoroutine(NacitajMapu());
                         }
                         //Debug.Log("Netrafil si. :(");
                     }
+                   Debug.Log(GameObject.Find("Target").transform.position.x);
+                    Debug.Log(GameObject.Find("Target").transform.position.y);
                 }
                 else   // ak som nepoložil puk tak sa všetko reštartuje odznova o 5 sek.
                 {
@@ -138,7 +148,6 @@ public class ControlMap : MonoBehaviour {
                     if (POmocnaUnlock == 1)
                     {
                         locked = false;
-                        Startgame = false;
                         StartCoroutine(NacitajMapu());
                     }
                 }

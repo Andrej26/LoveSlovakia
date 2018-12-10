@@ -196,7 +196,7 @@ public class ControlPuzzle : MonoBehaviour {
     IEnumerator NacitajScenu()
     {
         transitionAnim.SetTrigger("Clouds");
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(4f);
         SceneManager.LoadScene("Mapa");
     }
 }
