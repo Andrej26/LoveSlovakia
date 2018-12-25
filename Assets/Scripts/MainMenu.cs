@@ -22,7 +22,14 @@ public class MainMenu : MonoBehaviour {
     public void PLayGame()
     {
         Vyber();
+        ZapisDoSuboru();
         StartCoroutine(NacitajScenu());
+    }
+
+    public void Save()
+    {
+        Vyber();
+        ZapisDoSuboru();
     }
 
     public void QuiteGame()
@@ -56,10 +63,10 @@ public class MainMenu : MonoBehaviour {
     {
         try
         {
-            string path = "Assets/Resources/data.txt";
+            string path = "dataS.txt";
             File.Delete(path);
 
-           //Write some text to the test.txt file
+           //Write some text to the dataS.txt file
             StreamWriter writer = new StreamWriter(path, true);
            
             for (int i=0;i<count;i++)
@@ -78,7 +85,7 @@ public class MainMenu : MonoBehaviour {
     // naplnenie pomocneho pola hodnotami zo suboru
     private void NacitanieZoSuboru()
     {
-        string path = "Assets/Resources/data.txt";
+        string path = "dataS.txt";
         string line;
 
         //Read the text from directly from the test.txt file
