@@ -22,7 +22,7 @@ public class MainMenu : MonoBehaviour {
     public void PLayGame()
     {
         Vyber();
-        ZapisDoSuboru();
+        //ZapisDoSuboru();
         StartCoroutine(NacitajScenu());
     }
 
@@ -41,8 +41,9 @@ public class MainMenu : MonoBehaviour {
     // random vyber mesta, ktore este nebolo
     private void Vyber()
     {
+
         int rand = UnityEngine.Random.Range(0, PuzzleVyber.Length/4);
-        // Debug.Log(PuzzleVyber.Length);
+        Debug.Log(PuzzleVyber.Length);
         if (PuzzleVyber[rand, 1].Equals("0"))
         {
             ControlPuzzle.Cesta = PuzzleVyber[rand, 0];
@@ -124,6 +125,6 @@ public class MainMenu : MonoBehaviour {
     {
         transitionAnim.SetTrigger("Clouds");
         yield return new WaitForSeconds(4f);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene("Showing");
     }
 }

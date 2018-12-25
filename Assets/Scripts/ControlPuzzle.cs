@@ -30,7 +30,6 @@ public class ControlPuzzle : MonoBehaviour {
 
     private float alpha=0,stop=0;
     private bool druha=false;
-    private string sestrerre;
     //private int lenraz = 0;
 
 
