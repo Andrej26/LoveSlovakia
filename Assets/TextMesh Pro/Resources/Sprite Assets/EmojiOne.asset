@@ -4,7 +4,7 @@
 Material:
   serializedVersion: 6
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: TextMeshPro/Sprite
   m_Shader: {fileID: 4800000, guid: cf81c85f95fe47e1a27f6ae460cf182c, type: 3}
@@ -36,7 +36,7 @@ Material:
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -273,12 +273,27 @@ MonoBehaviour:
     unicode: 9785
     pivot: {x: 0.5, y: 0.5}
     sprite: {fileID: 0}
-  fallbackSpriteAssets: []
+  - id: 16
+    x: 0
+    y: 384
+    width: 128
+    height: 128
+    xOffset: 0
+    yOffset: 115.6
+    xAdvance: 128
+    scale: 1
+    name: Smiling face with smiling eyes
+    hashCode: -1318250903
+    unicode: 9785
+    pivot: {x: 0.5, y: 0.5}
+    sprite: {fileID: 0}
+  fallbackSpriteAssets:
+  - {fileID: 0}
 --- !u!21 &1369835458
 Material:
   serializedVersion: 6
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: TextMeshPro/Sprite
   m_Shader: {fileID: 4800000, guid: cf81c85f95fe47e1a27f6ae460cf182c, type: 3}

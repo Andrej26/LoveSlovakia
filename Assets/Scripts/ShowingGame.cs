@@ -9,7 +9,8 @@ public class ShowingGame : MonoBehaviour {
 
     [SerializeField]
     private GameObject wintext;
-
+    [SerializeField]
+    private GameObject losetext;
     [SerializeField]
     private GameObject otazka;
     [SerializeField]
@@ -27,7 +28,7 @@ public class ShowingGame : MonoBehaviour {
     private List<int> HideHranoly = new List<int>(new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8});
 
     private float alpha = 0, stop = 0;
-    private bool prvacast = true, zadaniehodnot = true, mozesprepnut = false, uhadol = false;
+    private bool prvacast = true, zadaniehodnot = true, uhadol = false;
     private string nazovhranola="";
     private int randpozhranola=0;
 
@@ -35,14 +36,14 @@ public class ShowingGame : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        wintext.GetComponent<CanvasRenderer>().SetAlpha(alpha);
+        wintext.SetActive(false);
+        losetext.SetActive(false);
         otazka.GetComponent<CanvasRenderer>().SetAlpha(alpha);
         moznostA.SetActive(false);
         moznostB.SetActive(false);
         moznostC.SetActive(false);
 
         GameObject.Find(ControlPuzzle.Cesta).GetComponent<SpriteRenderer>().enabled = true;
-        //GameObject.Find(Cesta).GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, 0f);
         RandomPoleMoznosti();
     }
 
@@ -50,7 +51,7 @@ public class ShowingGame : MonoBehaviour {
     void Update()
     {
 
-        if (prvacast)  // na zaciatku sa najprv zobrazi text
+        if (prvacast)  // na zaciatku sa najprv zobrazi text s moznostami
          {
             if (alpha >= 1f)
             {
@@ -77,79 +78,80 @@ public class ShowingGame : MonoBehaviour {
             {
                 alpha = Time.deltaTime * 0.5f + alpha;
                 otazka.GetComponent<CanvasRenderer>().SetAlpha(alpha);
-               // Debug.Log(alpha);
             }
         }
-        else
+        else  // potom zacina pomaly sa odokrivat hladany obrazok
         {
 
-            //if (HideHranoly.Count != 0)
-            //{
-            //    if (uhadol)
-            //    {
+            if (HideHranoly.Count != 0)  //pozera sa ci este je co odkrit. Ak hej tak mame dve moznosti ktore mozu nastat.
+            {
+                if (uhadol) // Prva moznost, ked uhadol a este nie je cely obrazok odkrity. Tak sa odkrije aj cely zvisok naraz
+                {
+                    if (alpha <= 0f)
+                    {
+                        int pocetopakobvany = HideHranoly.Count;
+                        while (pocetopakobvany > 0)
+                        {
+                            randpozhranola = HideHranoly[pocetopakobvany - 1] + 1;
+                            nazovhranola = "BlackHranol0" + randpozhranola;
+                            GameObject.Find(nazovhranola).transform.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, 0f);
+                            pocetopakobvany--;
+                        }
+                        StartCoroutine(NacitajScenu());
+                    }
+                    else
+                    {
+                        int pocetopakobvany = HideHranoly.Count;
+                        alpha = alpha - Time.deltaTime * 0.5f;
+                        while (pocetopakobvany > 0)
+                        {
+                            randpozhranola = HideHranoly[pocetopakobvany - 1] + 1;
+                            nazovhranola = "BlackHranol0" + randpozhranola;
+                            GameObject.Find(nazovhranola).transform.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, alpha);
+                            pocetopakobvany--;
+                        }
+                    }
+                }
+                else // Druha moznost, ked este neuhadol. Tak sa pokracuje v nahodnom odkrivany obrazka.
+                {
+                    if (zadaniehodnot)
+                    {
+                        randpozhranola = HideHranoly[Random.Range(0, HideHranoly.Count)] + 1;
+                        nazovhranola = "BlackHranol0" + randpozhranola;
+                        Debug.Log(nazovhranola);
+                        zadaniehodnot = false;
+                    }
 
-            //        if (alpha <= 0f)
-            //        {
-            //            int pocetopakobvany = HideHranoly.Count;
-            //            while (pocetopakobvany > 0)
-            //            {
-            //                randpozhranola = HideHranoly[pocetopakobvany-1] +1;
-            //                nazovhranola = "BlackHranol0" + randpozhranola;
-            //                GameObject.Find(nazovhranola).transform.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, 0f);
-            //            }
-            //            mozesprepnut = true;
-            //        }
-            //        else
-            //        {
-            //            int pocetopakobvany = HideHranoly.Count;
-            //            alpha = alpha - Time.deltaTime * 0.5f;
-            //            while (pocetopakobvany > 0)
-            //            {
-            //                randpozhranola = HideHranoly[pocetopakobvany - 1] + 1;
-            //                nazovhranola = "BlackHranol0" + randpozhranola;
-            //                GameObject.Find(nazovhranola).transform.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, alpha);
-            //            }
-            //        }
-            //    }
-            //    else
-            //    {
-            //        if (zadaniehodnot)
-            //        {
-            //            randpozhranola = HideHranoly[Random.Range(0, HideHranoly.Count)]+1;
-            //            //Debug.Log(HideHranoly.Count);
-            //            nazovhranola = "BlackHranol0" + randpozhranola;
-            //            Debug.Log(nazovhranola);
-            //            zadaniehodnot = false;
-            //        }
+                    if (alpha <= 0f)
+                    {
+                        GameObject.Find(nazovhranola).transform.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, 0f);
 
-            //        if (alpha <= 0f)
-            //        {
-            //            GameObject.Find(nazovhranola).transform.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, 0f);
-
-            //            if (stop >= 1) // chvilkove pozastavenie pred dalsieho zmiznutia hranola
-            //            {
-            //                stop = 0;
-            //                alpha = 1;
-            //                //Debug.Log(randpozhranola);
-            //                HideHranoly.Remove(randpozhranola -1);
-            //                zadaniehodnot = true;
-            //            }
-            //            else
-            //            {
-            //                stop = Time.deltaTime * 0.9f + stop;
-            //            }
-            //        }
-            //        else
-            //        {
-            //            alpha = alpha - Time.deltaTime * 0.5f;
-            //            GameObject.Find(nazovhranola).transform.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, alpha);
-            //        }
-            //    }
-            //}
-            //else
-            //{
-            //    if (uhadol) mozesprepnut = true;
-            //}
+                        if (stop >= 1) // chvilkove pozastavenie pred dalsieho zmiznutia hranola
+                        {
+                            stop = 0;
+                            alpha = 1;
+                            HideHranoly.Remove(randpozhranola - 1);
+                            zadaniehodnot = true;
+                        }
+                        else
+                        {
+                            stop = Time.deltaTime * 0.9f + stop;
+                        }
+                    }
+                    else
+                    {
+                        alpha = alpha - Time.deltaTime * 0.5f;
+                        GameObject.Find(nazovhranola).transform.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, alpha);
+                    }
+                }
+            }
+            else
+            {
+                if (uhadol) // ked uhadol 
+                {
+                    StartCoroutine(NacitajScenu());
+                }
+            }
         }
     }
 
@@ -198,26 +200,25 @@ public class ShowingGame : MonoBehaviour {
         if (mojbuton.name.Equals(VyhernyButton))
         {
             mojbuton.GetComponent<Image>().color = Color.green;
-            wintext.GetComponent<CanvasRenderer>().SetAlpha(alpha);
-            uhadol = true;
-            if (mozesprepnut)
-            {
-                StartCoroutine(NacitajScenu());
-            }
+            alpha = 1;
+            losetext.SetActive(false);
+            wintext.SetActive(true);
+            uhadol = true;       
         }
 
         else
         {
             mojbuton.GetComponent<Image>().color = Color.red;
+            losetext.SetActive(true);
         }
     }
 
     //pozastavenie kodu na 4 sekundy pred prepnutim na dalsiu scenu
     IEnumerator NacitajScenu()
     {
-       // yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.5f);
         transitionAnim.SetTrigger("Clouds");
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(3f);
         SceneManager.LoadScene("Mapa");
     }
 }

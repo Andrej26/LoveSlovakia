@@ -10,8 +10,7 @@ public class ControlPuzzle : MonoBehaviour {
     [SerializeField]
     private GameObject wintext;
     [SerializeField]
-    private GameObject backbutton;
-
+    private GameObject losetext;
     [SerializeField]
     private GameObject otazka;
     [SerializeField]
@@ -35,7 +34,8 @@ public class ControlPuzzle : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        wintext.GetComponent<CanvasRenderer>().SetAlpha(alpha);
+        wintext.SetActive(false);
+        losetext.SetActive(false);
         otazka.GetComponent<CanvasRenderer>().SetAlpha(alpha);
         moznostA.SetActive(false);
         moznostB.SetActive(false);
@@ -44,7 +44,6 @@ public class ControlPuzzle : MonoBehaviour {
         GameObject.Find(Cesta).GetComponent<SpriteRenderer>().enabled = true;
         GameObject.Find(Cesta).GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, 0f);
 
-        backbutton.SetActive(false);
         RandomPoleMoznosti();
     }
 
@@ -164,8 +163,8 @@ public class ControlPuzzle : MonoBehaviour {
         if (mojbuton.name.Equals(VyhernyButton))
         {
             mojbuton.GetComponent<Image>().color = Color.green;
-           // backbutton.SetActive(true);
-            wintext.GetComponent<CanvasRenderer>().SetAlpha(alpha);
+            losetext.SetActive(false);
+            wintext.SetActive(true);
             puzzlepeace.pocet = 0;
             puzzlepeace.RandomPomocnePole = new List<int>(new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 });
             StartCoroutine(NacitajScenu());          
@@ -174,28 +173,16 @@ public class ControlPuzzle : MonoBehaviour {
         else
         {
             mojbuton.GetComponent<Image>().color = Color.red;
+            losetext.SetActive(true);
         }
-
-       /* if (moznostB.name.Equals(VyhernyButton))
-            moznostB.GetComponent<Image>().color = Color.green;
-        else
-        {
-            moznostB.GetComponent<Image>().color = Color.red;
-        }
-
-        if (moznostC.name.Equals(VyhernyButton))
-            moznostC.GetComponent<Image>().color = Color.green;
-        else
-        {
-            moznostC.GetComponent<Image>().color = Color.red;
-        }*/
     }
 
     //pozastavenie kodu na 3 sekundy pred prepnutim na dalsiu scenu
     IEnumerator NacitajScenu()
     {
+        yield return new WaitForSeconds(0.5f);
         transitionAnim.SetTrigger("Clouds");
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(3f);
         SceneManager.LoadScene("Mapa");
     }
 }

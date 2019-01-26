@@ -9,33 +9,51 @@ public class MainMenu : MonoBehaviour {
 
     public static string[,] PuzzleVyber = new string[3,4];
     public static int count=0;
+    private static int vsetkouhadnute = 0;
     public Animator transitionAnim;
+    private static int DruhHry=0;
+    [SerializeField]
+    private GameObject VyskakOkno;
+    [SerializeField]
+    private GameObject Odpoved;
+    [SerializeField]
+    private GameObject KoniecHry;
 
 
     public void Start()
     {
-       // ZapisDoSuboru();
+        count = 0;
+        vsetkouhadnute = 0;
         NacitanieZoSuboru();
+        VyskakOkno.SetActive(false);
+        Odpoved.SetActive(false);
+        KoniecHry.SetActive(false);
+       // Debug.Log("Som tu");
     }
 
 
     public void PLayGame()
     {
-        Vyber();
-        //ZapisDoSuboru();
-        StartCoroutine(NacitajScenu());
-    }
-
-    public void Save()
-    {
-        Vyber();
-        ZapisDoSuboru();
+        if (vsetkouhadnute == count)
+        {
+            //Debug.Log("Som tu clovece.");
+            VyskakOkno.SetActive(true);
+        }
+        else
+        {
+           // Debug.Log("Vsetky: "+ vsetkouhadnute);
+           // Debug.Log("POcet: "+ count);
+            Vyber();
+            ZapisDoSuboru();
+            vsetkouhadnute++;
+            
+            StartCoroutine(NacitajScenu());
+        }
     }
 
     public void QuiteGame()
     {
-        ZapisDoSuboru();
-        Application.Quit();
+        KoniecHry.SetActive(true);
     }
 
     // random vyber mesta, ktore este nebolo
@@ -43,7 +61,7 @@ public class MainMenu : MonoBehaviour {
     {
 
         int rand = UnityEngine.Random.Range(0, PuzzleVyber.Length/4);
-        Debug.Log(PuzzleVyber.Length);
+        //Debug.Log(PuzzleVyber.Length);
         if (PuzzleVyber[rand, 1].Equals("0"))
         {
             ControlPuzzle.Cesta = PuzzleVyber[rand, 0];
@@ -110,6 +128,7 @@ public class MainMenu : MonoBehaviour {
                         PuzzleVyber[count, 2] = entries[2];
                         PuzzleVyber[count, 3] = entries[3];
                         count++;
+                        if (Convert.ToInt32(entries[1]) == 1) vsetkouhadnute++;
                         //Debug.Log(entries[0] +",,,"+ entries[1] +",,,"+ entries[2] +",,,"+ entries[3]);
                         //Debug.Log(line);
                     }
@@ -121,10 +140,78 @@ public class MainMenu : MonoBehaviour {
         
     }
 
+    private void VyberHry()
+    {
+        if (DruhHry > 1) { DruhHry = 1; }
+        else { DruhHry++; }
+    
+        switch (DruhHry)
+        {
+            case 1:
+                SceneManager.LoadScene("Puzzle");
+                break;
+            case 2:
+                SceneManager.LoadScene("Showing");
+                break;
+        }
+    }
+
+    private void Reset()
+    {
+        for (int i = 0; i < count; i++)
+        {
+            PuzzleVyber[i, 1] = "0";
+        }
+    }
+
+
+    public void VyskakovacieOknoAno()
+    {
+        Reset();
+        ZapisDoSuboru();
+        VyskakOkno.SetActive(false);
+        Odpoved.SetActive(true);
+        StartCoroutine(ResetnyScenu());
+    }
+
+    public void VyskakovacieOknoNie()
+    {
+        VyskakOkno.SetActive(false);
+    }
+
+    public void KoniecHryAno()
+    {
+        ZapisDoSuboru();
+        StartCoroutine(UkonciHru());
+    }
+
+    public void KoniecHryNie()
+    {
+        KoniecHry.SetActive(false);
+    }
+
+    IEnumerator UkonciHru()
+    {
+        //yield return new WaitForSeconds(1f);
+        transitionAnim.SetTrigger("Clouds");
+        yield return new WaitForSeconds(2f);
+        Application.Quit();
+    }
+
     IEnumerator NacitajScenu()
     {
+        //yield return new WaitForSeconds(1f);
         transitionAnim.SetTrigger("Clouds");
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(3f);
         SceneManager.LoadScene("Showing");
+        //VyberHry();
+    }
+
+    IEnumerator ResetnyScenu()
+    {
+        yield return new WaitForSeconds(0.5f);
+        transitionAnim.SetTrigger("Clouds");
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene("MainMenu");
     }
 }

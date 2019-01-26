@@ -13,7 +13,9 @@ public class ControlMap : MonoBehaviour {
     [SerializeField]
     private GameObject Otazka;
     [SerializeField]
-    private GameObject WinOrNotText;
+    private GameObject WinText;
+    [SerializeField]
+    private GameObject LoseText;
     [SerializeField]
     private Animator CountDownAnimation;
     [SerializeField]
@@ -33,7 +35,8 @@ public class ControlMap : MonoBehaviour {
     {
         timer = settime;
         timerAnimation = 6;
-        WinOrNotText.SetActive(false);
+        WinText.SetActive(false);
+        LoseText.SetActive(false);
         Otazka.SetActive(false);
         looptime = 2; // velkost prestavky
         hladanemiesto.transform.position = new Vector2(9.2f, -2.1f);
@@ -67,8 +70,10 @@ public class ControlMap : MonoBehaviour {
 
     IEnumerator NacitajMapu()
     {
+
         transitionAnim.SetTrigger("Clouds");
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(3f);
+        ClickFlag.activePuk = false;
         Startgame = false;
         SceneManager.LoadScene("Mapa");
     }
@@ -76,18 +81,19 @@ public class ControlMap : MonoBehaviour {
     IEnumerator NacitajMainMenu()
     {
         transitionAnim.SetTrigger("Clouds");
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(3f);
         ClickFlag.activePuk = false;
+        Startgame = false;
         SceneManager.LoadScene("MainMenu");
     }
 
     IEnumerator PlayGame()
     {
-        yield return new WaitForSeconds(4); // zdrzanie kodu na 4 sekundy
+        yield return new WaitForSeconds(3f); // zdrzanie kodu na 3 sekundy
         if (Startgame)
         {
             Otazka.SetActive(true);
-            Otazka.GetComponentInChildren<TextMeshProUGUI>().text = "Kde lezi mesto " + ControlPuzzle.Cesta;
+            Otazka.GetComponentInChildren<TextMeshProUGUI>().text = "Kde leží mesto " + ControlPuzzle.Cesta;
 
             //odpocet do položenia puku
             if (timer > 0.0f)
@@ -114,21 +120,21 @@ public class ControlMap : MonoBehaviour {
                         Mathf.Abs(GameObject.Find("Target").transform.position.y - GameObject.Find("TargetPlace").transform.position.y) <= 1.1f)
                     {
                         //Debug.Log("Trafil si. :)");
-                        WinOrNotText.GetComponentInChildren<TextMeshProUGUI>().text = "Trafil si. Dobra praca chlope. :D";
-                        WinOrNotText.SetActive(true);
+                        LoseText.SetActive(false);
+                        WinText.SetActive(true);
                         loopTimer = true;
                         if (POmocnaUnlock == 1)
                         {
                             puzzlepeace.pocet = 0;
                             puzzlepeace.RandomPomocnePole = new List<int>(new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 });
                             MainMenu.count = 0;
+                            locked = false;
                             StartCoroutine(NacitajMainMenu());
                         }
                     }
                     else
                     {
-                        WinOrNotText.GetComponentInChildren<TextMeshProUGUI>().text = "Netrafil si. Vyskusame este raz. :)";
-                        WinOrNotText.SetActive(true);
+                        LoseText.SetActive(true);
                         loopTimer = true;
                         if (POmocnaUnlock == 1)
                         {
@@ -142,8 +148,8 @@ public class ControlMap : MonoBehaviour {
                 }
                 else   // ak som nepoložil puk tak sa všetko reštartuje odznova o 5 sek.
                 {
-                    WinOrNotText.GetComponentInChildren<TextMeshProUGUI>().text = "Nestihol si nic oznacit. Tak to skusime este raz. ;)";
-                    WinOrNotText.SetActive(true);
+                    LoseText.GetComponentInChildren<TextMeshProUGUI>().text = "Nestihol si nič označiť. Tak to skúsime ešte raz. <sprite=1>";
+                    LoseText.SetActive(true);
                     loopTimer = true;
                     if (POmocnaUnlock == 1)
                     {
