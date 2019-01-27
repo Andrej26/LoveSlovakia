@@ -15,6 +15,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Showing.unity
     guid: ab93df7076da4824ca33c95c5833a149
   - enabled: 1
+    path: Assets/Scenes/FillUp.unity
+    guid: 2066afc7f31316547b83155dec05c16d
+  - enabled: 1
     path: Assets/Scenes/Mapa.unity
     guid: 198f7c7a26c24c342b4aefcb08ae372d
   m_configObjects: {}

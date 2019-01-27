@@ -142,9 +142,9 @@ public class MainMenu : MonoBehaviour {
 
     private void VyberHry()
     {
-        if (DruhHry > 1) { DruhHry = 1; }
-        else { DruhHry++; }
-    
+        //if (DruhHry > 2) { DruhHry = 1; }
+        //else { DruhHry++; }
+        DruhHry = 3;
         switch (DruhHry)
         {
             case 1:
@@ -152,6 +152,9 @@ public class MainMenu : MonoBehaviour {
                 break;
             case 2:
                 SceneManager.LoadScene("Showing");
+                break;
+            case 3:
+                SceneManager.LoadScene("FillUp");
                 break;
         }
     }
@@ -203,8 +206,8 @@ public class MainMenu : MonoBehaviour {
         //yield return new WaitForSeconds(1f);
         transitionAnim.SetTrigger("Clouds");
         yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene("Showing");
-        //VyberHry();
+        //SceneManager.LoadScene("Showing");
+        VyberHry();
     }
 
     IEnumerator ResetnyScenu()
