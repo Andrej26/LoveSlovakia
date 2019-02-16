@@ -14,15 +14,15 @@ public class FillUpScript : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        GameObject.Find(ControlPuzzle.Cesta).GetComponent<SpriteRenderer>().enabled = true;
+        GameObject.Find(MainMenu.Cesta).GetComponent<SpriteRenderer>().enabled = true;
     }
 	
 	// Update is called once per frame
 	void Update () {
         //Debug.Log(Neuhadol);
-        if (pocetPismenMesta == ControlPuzzle.Cesta.Length)
+        if (pocetPismenMesta == MainMenu.Cesta.Length)
         {
-            if (PoskladaneSlovo.Equals(ControlPuzzle.Cesta.ToUpper()))
+            if (PoskladaneSlovo.Equals(MainMenu.Cesta.ToUpper()))
             {
                 StartCoroutine(NacitajScenu());
                 StopCoroutine(NacitajScenu());

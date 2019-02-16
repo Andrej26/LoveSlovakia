@@ -19,7 +19,7 @@ public class FillUpSpawnFrame : MonoBehaviour {
         widthBR = BackgroundRec.GetComponent<SpriteRenderer>().bounds.size.x;
         widthSR = SpavningRec.GetComponent<SpriteRenderer>().bounds.size.x;
         heightSR = SpavningRec.GetComponent<SpriteRenderer>().bounds.size.y;
-        pocetPimenok = ControlPuzzle.Cesta.Length;
+        pocetPimenok = MainMenu.Cesta.Length;
         FrameSuradnice = new float[pocetPimenok, 3];
         SpawnObject();
     }

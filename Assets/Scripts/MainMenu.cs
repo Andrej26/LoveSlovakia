@@ -9,6 +9,7 @@ public class MainMenu : MonoBehaviour {
 
     public static string[,] PuzzleVyber = new string[3,4];
     public static int count=0;
+    public static string Cesta;
     private static int vsetkouhadnute = 0;
     public Animator transitionAnim;
     private static int DruhHry=0;
@@ -64,9 +65,9 @@ public class MainMenu : MonoBehaviour {
         //Debug.Log(PuzzleVyber.Length);
         if (PuzzleVyber[rand, 1].Equals("0"))
         {
-            ControlPuzzle.Cesta = PuzzleVyber[rand, 0];
+            Cesta = "Banská Štiavnica";  //PuzzleVyber[rand, 0];
             ControlMap.SuradnicaX = float.Parse(PuzzleVyber[rand , 2]);
-            ControlMap.SuradnicaY = float.Parse(PuzzleVyber[rand, 3]);
+            ControlMap.SuradnicaY = float.Parse(PuzzleVyber[rand , 3]);
             PuzzleVyber[rand, 1] = "1";
         }     
         else
@@ -144,7 +145,7 @@ public class MainMenu : MonoBehaviour {
     {
         //if (DruhHry > 2) { DruhHry = 1; }
         //else { DruhHry++; }
-        DruhHry = 3;
+        DruhHry = 1;
         switch (DruhHry)
         {
             case 1:

@@ -24,7 +24,7 @@ public class FillUpSpawnLetters : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        NazovMesta = ControlPuzzle.Cesta;
+        NazovMesta = MainMenu.Cesta;
       
         widthBR = BackgroundRec.GetComponent<SpriteRenderer>().bounds.size.x;
         widthSR = SpavningRec.GetComponent<SpriteRenderer>().bounds.size.x;

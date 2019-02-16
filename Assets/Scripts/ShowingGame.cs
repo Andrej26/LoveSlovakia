@@ -43,7 +43,7 @@ public class ShowingGame : MonoBehaviour {
         moznostB.SetActive(false);
         moznostC.SetActive(false);
 
-        GameObject.Find(ControlPuzzle.Cesta).GetComponent<SpriteRenderer>().enabled = true;
+        GameObject.Find(MainMenu.Cesta).GetComponent<SpriteRenderer>().enabled = true;
         RandomPoleMoznosti();
     }
 
@@ -163,7 +163,7 @@ public class ShowingGame : MonoBehaviour {
 
         if (RandomPozicia.Count.Equals(3))  // hned na za ciatku si spravnu odpoved nahodne ulozime medzi vybrane moznosti
         {
-            RandomMoznosti[randpozicia] = ControlPuzzle.Cesta;
+            RandomMoznosti[randpozicia] = MainMenu.Cesta;
             VyhernyButton = MenaButtonov[randpozicia];
             RandomPozicia.Remove(randpozicia);
             RandomPoleMoznosti();

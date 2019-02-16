@@ -93,7 +93,7 @@ public class ControlMap : MonoBehaviour {
         if (Startgame)
         {
             Otazka.SetActive(true);
-            Otazka.GetComponentInChildren<TextMeshProUGUI>().text = "Kde leží mesto " + ControlPuzzle.Cesta;
+            Otazka.GetComponentInChildren<TextMeshProUGUI>().text = "Kde leží mesto " + MainMenu.Cesta;
 
             //odpocet do položenia puku
             if (timer > 0.0f)
@@ -125,8 +125,8 @@ public class ControlMap : MonoBehaviour {
                         loopTimer = true;
                         if (POmocnaUnlock == 1)
                         {
-                            puzzlepeace.pocet = 0;
-                            puzzlepeace.RandomPomocnePole = new List<int>(new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 });
+                            PuzzleControl.pocet = 0;
+                            PuzzleControl.RandomPomocnePole = new List<int>(new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 });
                             MainMenu.count = 0;
                             locked = false;
                             StartCoroutine(NacitajMainMenu());
