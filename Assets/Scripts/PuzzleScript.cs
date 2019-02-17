@@ -21,12 +21,18 @@ public class PuzzleScript : MonoBehaviour {
     private GameObject moznostB;
     [SerializeField]
     private GameObject moznostC;
+    [SerializeField]
+    private GameObject moznostD;
+    [SerializeField]
+    private GameObject moznostE;
+    [SerializeField]
+    private GameObject moznostF;
 
     public Animator transitionAnim;
-    private string[] RandomMoznosti = new string[3];
-    private string[] MenaButtonov = new string[3] { "MoznostA", "MoznostB", "MoznostC"};
+    private string[] RandomMoznosti = new string[6];
+    private string[] MenaButtonov = new string[6] { "MoznostA", "MoznostB", "MoznostC", "MoznostD", "MoznostE", "MoznostF" };
     private string VyhernyButton;
-    private List<int> RandomPozicia = new List<int>(new int[] { 0, 1, 2});
+    private List<int> RandomPozicia = new List<int>(new int[] { 0, 1, 2, 3, 4, 5 });
 
     private float alpha=0,stop=0;
     private bool druha=false;
@@ -46,7 +52,7 @@ public class PuzzleScript : MonoBehaviour {
         GameObject.Find(MainMenu.Cesta).GetComponent<SpriteRenderer>().enabled = true;
         GameObject.Find(MainMenu.Cesta).GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, 0f);
 
-        RandomPoleMoznosti();
+        RandomPoleMoznosti();      
     }
 
     // Update is called once per frame
@@ -68,6 +74,12 @@ public class PuzzleScript : MonoBehaviour {
                     moznostB.SetActive(true);
                     moznostC.GetComponentInChildren<TextMeshProUGUI>().text = RandomMoznosti[2];
                     moznostC.SetActive(true);
+                    moznostD.GetComponentInChildren<TextMeshProUGUI>().text = RandomMoznosti[3];
+                    moznostD.SetActive(true);
+                    moznostE.GetComponentInChildren<TextMeshProUGUI>().text = RandomMoznosti[4];
+                    moznostE.SetActive(true);
+                    moznostF.GetComponentInChildren<TextMeshProUGUI>().text = RandomMoznosti[5];
+                    moznostF.SetActive(true);
                 }
                 else
                 {
@@ -127,7 +139,7 @@ public class PuzzleScript : MonoBehaviour {
         int randpozicia = RandomPozicia[Random.Range(0, RandomPozicia.Count)];
         int randnazov = Random.Range(0, MainMenu.PuzzleVyber.Length / 4);
 
-        if (RandomPozicia.Count.Equals(3))
+        if (RandomPozicia.Count.Equals(6))
         {
             RandomMoznosti[randpozicia] = MainMenu.Cesta;
             VyhernyButton = MenaButtonov[randpozicia];
@@ -138,7 +150,10 @@ public class PuzzleScript : MonoBehaviour {
         {
             if ((MainMenu.PuzzleVyber[randnazov, 0].Equals(RandomMoznosti[0])) ||
                 (MainMenu.PuzzleVyber[randnazov, 0].Equals(RandomMoznosti[1])) ||
-                (MainMenu.PuzzleVyber[randnazov, 0].Equals(RandomMoznosti[2])))
+                (MainMenu.PuzzleVyber[randnazov, 0].Equals(RandomMoznosti[2])) ||
+                (MainMenu.PuzzleVyber[randnazov, 0].Equals(RandomMoznosti[3])) ||
+                (MainMenu.PuzzleVyber[randnazov, 0].Equals(RandomMoznosti[4])) ||
+                (MainMenu.PuzzleVyber[randnazov, 0].Equals(RandomMoznosti[5])))
             {
                 RandomPoleMoznosti();
             }

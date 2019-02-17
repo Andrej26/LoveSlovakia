@@ -28,7 +28,7 @@ public class ClickFlag : MonoBehaviour {
                 // Vector3 mousePos = Camera.main.ScreenToViewportPoint(Input.mousePosition);
                 Vector2 mousepos2D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 target.transform.position = new Vector2(mousepos2D.x, mousepos2D.y);
-                // Debug.Log(mousepos2D);
+                Debug.Log(mousepos2D);
             }
         }
     }

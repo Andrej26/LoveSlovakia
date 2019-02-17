@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour {
 
-    public static string[,] PuzzleVyber = new string[3,4];
+    public static string[,] PuzzleVyber = new string[6,4];
     public static int count=0;
     public static string Cesta;
     private static int vsetkouhadnute = 0;
@@ -20,9 +20,14 @@ public class MainMenu : MonoBehaviour {
     [SerializeField]
     private GameObject KoniecHry;
 
+    private static List<int> RandPomocPoleFarieb = new List<int>(new int[] { 0, 1, 2, 3, 4, 5 });
+    public static string VybranyFrame;
+
 
     public void Start()
     {
+        RandFrameChoose(); // vyber farby frameu
+
         count = 0;
         vsetkouhadnute = 0;
         NacitanieZoSuboru();
@@ -65,7 +70,7 @@ public class MainMenu : MonoBehaviour {
         //Debug.Log(PuzzleVyber.Length);
         if (PuzzleVyber[rand, 1].Equals("0"))
         {
-            Cesta = "Banská Štiavnica";  //PuzzleVyber[rand, 0];
+            Cesta = PuzzleVyber[rand, 0];
             ControlMap.SuradnicaX = float.Parse(PuzzleVyber[rand , 2]);
             ControlMap.SuradnicaY = float.Parse(PuzzleVyber[rand , 3]);
             PuzzleVyber[rand, 1] = "1";
@@ -159,6 +164,26 @@ public class MainMenu : MonoBehaviour {
                 break;
         }
     }
+
+    //Vyber farby frame-u
+    private void RandFrameChoose()
+    {
+        string[] Pole_Farieb = new string[6] { "Blue", "Cyan", "Green", "Purple", "Red", "Yellow" };
+
+        if (RandPomocPoleFarieb.Count == 1)
+        {
+            VybranyFrame = Pole_Farieb[RandPomocPoleFarieb[0]];
+            RandPomocPoleFarieb.Remove(RandPomocPoleFarieb[0]);
+            RandPomocPoleFarieb = new List<int>(new int[] { 0, 1, 2, 3, 4, 5 });
+        }
+        else
+        {
+            int randcolor = RandPomocPoleFarieb[UnityEngine.Random.Range(0, RandPomocPoleFarieb.Count)];
+            VybranyFrame = Pole_Farieb[randcolor];
+            RandPomocPoleFarieb.Remove(randcolor);
+        }
+    }
+
 
     private void Reset()
     {

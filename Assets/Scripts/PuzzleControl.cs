@@ -17,14 +17,14 @@ public class PuzzleControl : MonoBehaviour {
     private static Sprite[] Sprite_Frame_array = new Sprite[20];
     public static int pocet = 0;
     private string namesss;
-    private string VybranyFrame = "Red";
 
 
     // Use this for initialization
     void Start() {
 
         Sprite_Puzzle_array = Resources.LoadAll<Sprite>(MainMenu.Cesta); // nacitanie vsetkych Puzzle assetov z vybraneho priecinku
-        Sprite_Frame_array = Resources.LoadAll<Sprite>("Frames/" + VybranyFrame); // nacitanie vsetkych Frame assetov z vybraneho priecinku
+        Sprite_Frame_array = Resources.LoadAll<Sprite>("Frames/" + MainMenu.VybranyFrame); // nacitanie vsetkych Frame assetov z vybraneho priecinku
+
         PuzzleArray = new string[2,20];
         NaplnPuzzleArray();
         RandPuzzleSpawn();
