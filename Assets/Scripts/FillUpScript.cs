@@ -20,9 +20,9 @@ public class FillUpScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         //Debug.Log(Neuhadol);
-        if (pocetPismenMesta == MainMenu.Cesta.Length)
+        if (pocetPismenMesta == FillUpSpawnLetters.NazovBezMedzier.Length)
         {
-            if (PoskladaneSlovo.Equals(MainMenu.Cesta.ToUpper()))
+            if (PoskladaneSlovo.Equals(FillUpSpawnLetters.NazovBezMedzier))
             {
                 StartCoroutine(NacitajScenu());
                 StopCoroutine(NacitajScenu());
@@ -40,7 +40,7 @@ public class FillUpScript : MonoBehaviour {
         PoskladaneSlovo = "";
         pocetPismenMesta = 0;
         Neuhadol = true;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.3f);
         Neuhadol = false;
     }
 

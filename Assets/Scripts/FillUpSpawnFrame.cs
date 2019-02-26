@@ -19,13 +19,14 @@ public class FillUpSpawnFrame : MonoBehaviour {
         widthBR = BackgroundRec.GetComponent<SpriteRenderer>().bounds.size.x;
         widthSR = SpavningRec.GetComponent<SpriteRenderer>().bounds.size.x;
         heightSR = SpavningRec.GetComponent<SpriteRenderer>().bounds.size.y;
-        pocetPimenok = MainMenu.Cesta.Length;
-        FrameSuradnice = new float[pocetPimenok, 3];
-        SpawnObject();
+        StartCoroutine(SpawniObjekty());
     }
 
     void SpawnObject()
     {
+        pocetPimenok = FillUpSpawnLetters.NazovBezMedzier.Length;
+        FrameSuradnice = new float[pocetPimenok, 3];
+
         float pomocnaX;
         int kolkosazmesti = 0;
         float aktualX = BackgroundRec.transform.position.x;
@@ -40,7 +41,7 @@ public class FillUpSpawnFrame : MonoBehaviour {
         for (int i = 1; i < 20; i++) // zistenie kolko sa zmesti do jedneho riadku okienok
         {
             if (((widthSR + rozostup) * i + rozostup) < widthBR) kolkosazmesti++;
-           // Debug.Log(kolkosazmesti);
+           //Debug.Log(kolkosazmesti);
         }
 
         if (pocetPimenok <= kolkosazmesti){ // ked je pocet okienok mensi ako sa zmesti do 1 riadku
@@ -51,6 +52,7 @@ public class FillUpSpawnFrame : MonoBehaviour {
             kolkoriadkov = 2;
             aktualY = aktualY + (heightSR / 2) + (rozostup / 2);
             pomocnyPocet = FillUpSpawnLetters.miestoMedzery;
+            Debug.Log(FillUpSpawnLetters.miestoMedzery);
         }
 
         for (int j = 0; j < kolkoriadkov; j++)
@@ -85,5 +87,11 @@ public class FillUpSpawnFrame : MonoBehaviour {
             pomocnyPocet = pocetPimenok - FillUpSpawnLetters.miestoMedzery;
         }
 
+    }
+
+    IEnumerator SpawniObjekty()
+    {
+        yield return new WaitForSeconds(0.2f);
+        SpawnObject();
     }
 }

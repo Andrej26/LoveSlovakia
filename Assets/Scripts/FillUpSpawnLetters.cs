@@ -10,7 +10,7 @@ public class FillUpSpawnLetters : MonoBehaviour {
 
     private List<string> PolePismenMesta = new List<string>();  // pomocne pole pismen Mesta
     public Sprite[] VsetkyPismena;        // vsetky obrazky jednotlivych pismen
-    private string NazovMesta;
+    public static string NazovBezMedzier = "";
     private int pridanePismena = 4;     // pocet pridanych pismen na zmiatnutie hraca
 
     public GameObject SpavningRec;
@@ -24,12 +24,11 @@ public class FillUpSpawnLetters : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        NazovMesta = MainMenu.Cesta;
       
         widthBR = BackgroundRec.GetComponent<SpriteRenderer>().bounds.size.x;
         widthSR = SpavningRec.GetComponent<SpriteRenderer>().bounds.size.x;
         heightSR = SpavningRec.GetComponent<SpriteRenderer>().bounds.size.y;
-        RozlozenieNazvu(NazovMesta);
+        RozlozenieNazvu(MainMenu.Cesta);
         RandomneRozhadzaniePismen();
 
         //FillUPChangeSprite.PismenaSuradnice = new float[RandRozhadzPolePismen.Count, 2];
@@ -44,18 +43,38 @@ public class FillUpSpawnLetters : MonoBehaviour {
     private void RozlozenieNazvu(string NazovMesta)
     {
         //Debug.Log(Mesto.Length);
-        int pocetVelkychPismen = 0;
+        //int pocetVelkychPismen = 0;
         string pomocnaPremenna;
 
         for (int i = 0; i < NazovMesta.Length; i++)
         {
-            pomocnaPremenna = NazovMesta.Substring(i, 1).ToUpper();
-            //Debug.Log(pomocnaPremenna);
-            PolePismenMesta.Add(pomocnaPremenna);
+            if (NazovMesta.Substring(i, 1).Equals(" "))
+            {
+                miestoMedzery = i;
+                //Debug.Log("Je ich: " + miestoMedzery);
+            }
+            else
+            {
+                pomocnaPremenna = NazovMesta.Substring(i, 1).ToUpper();
+                NazovBezMedzier = NazovBezMedzier + pomocnaPremenna;
+                //Debug.Log(pomocnaPremenna);
+                PolePismenMesta.Add(pomocnaPremenna);
+            }
+            
+            //}
+            //pomocnaPremenna = NazovMesta.Substring(i, 1);
+            //if (pomocnaPremenna.Any(char.IsUpper)) pocetVelkychPismen++;
+            
 
-            if (pomocnaPremenna.Any(char.IsUpper)) pocetVelkychPismen++;
-            if (pocetVelkychPismen > 1) miestoMedzery = i + 1;
+            //if (pocetVelkychPismen > 1)
+            //{
+            //    pocetVelkychPismen = 0;
+            //    miestoMedzery = i - 1;
+            //}
+            //Debug.Log("Je ich: " + miestoMedzery);
         }
+            //Debug.Log(NazovMesta.Length);
+            //Debug.Log(PolePismenMesta.Count);
     }
 
     private void SpawningPismen(int pocetPismen)
@@ -124,16 +143,18 @@ public class FillUpSpawnLetters : MonoBehaviour {
         {
             rand = Random.Range(0, VsetkyPismena.Length);
             PolePismenMesta.Add(VsetkyPismena[rand].name);
-            //Debug.Log(VsetkyPismena[rand]);
+            
         }
+        int pocet = PolePismenMesta.Count;
 
-        for (int j = 0; j < (NazovMesta.Length + pridanePismena); j++)
+        for (int k = 0; k < pocet; k++)
         {
             rand = Random.Range(0, PolePismenMesta.Count);                           // ziskanie rand pozicie z PolaPismen
-            //Debug.Log(NazovMesta.Length + pridanePismena);
+            Debug.Log(PolePismenMesta.Count);
             RandRozhadzPolePismen.Add(PolePismenMesta[rand]);                        // pridanie pismena na danej pozicii do noveho pola
             PolePismenMesta.RemoveAt(rand);                                          // vymazanie pismena zo stareho pola
         }
+        Debug.Log(RandRozhadzPolePismen.Count);
     }
 
 }

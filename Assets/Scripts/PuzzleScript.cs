@@ -28,7 +28,14 @@ public class PuzzleScript : MonoBehaviour {
     [SerializeField]
     private GameObject moznostF;
 
-    public Animator transitionAnim;
+    [SerializeField]
+    private Animator transitionAnim;
+    [SerializeField]
+    private Animator Dust;
+    [SerializeField]
+    private Animator Papyrus;
+
+
     private string[] RandomMoznosti = new string[6];
     private string[] MenaButtonov = new string[6] { "MoznostA", "MoznostB", "MoznostC", "MoznostD", "MoznostE", "MoznostF" };
     private string VyhernyButton;
@@ -41,13 +48,11 @@ public class PuzzleScript : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+
         VsetkyMoznosti.SetActive(false);
         wintext.SetActive(false);
         losetext.SetActive(false);
         otazka.GetComponent<CanvasRenderer>().SetAlpha(alpha);
-        moznostA.SetActive(false);
-        moznostB.SetActive(false);
-        moznostC.SetActive(false);
 
         GameObject.Find(MainMenu.Cesta).GetComponent<SpriteRenderer>().enabled = true;
         GameObject.Find(MainMenu.Cesta).GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, 0f);
@@ -66,20 +71,14 @@ public class PuzzleScript : MonoBehaviour {
                 otazka.GetComponent<CanvasRenderer>().SetAlpha(alpha);
 
                 if (stop >= 1) // chvilkove pozastavenie pred nacitanim textu
-                {
-                    VsetkyMoznosti.SetActive(true);
+                {           
                     moznostA.GetComponentInChildren<TextMeshProUGUI>().text= RandomMoznosti[0];
-                    moznostA.SetActive(true);
                     moznostB.GetComponentInChildren<TextMeshProUGUI>().text = RandomMoznosti[1];
-                    moznostB.SetActive(true);
                     moznostC.GetComponentInChildren<TextMeshProUGUI>().text = RandomMoznosti[2];
-                    moznostC.SetActive(true);
                     moznostD.GetComponentInChildren<TextMeshProUGUI>().text = RandomMoznosti[3];
-                    moznostD.SetActive(true);
                     moznostE.GetComponentInChildren<TextMeshProUGUI>().text = RandomMoznosti[4];
-                    moznostE.SetActive(true);
                     moznostF.GetComponentInChildren<TextMeshProUGUI>().text = RandomMoznosti[5];
-                    moznostF.SetActive(true);
+                    VsetkyMoznosti.SetActive(true);
                 }
                 else
                 {
@@ -97,6 +96,8 @@ public class PuzzleScript : MonoBehaviour {
         {
             if (PuzzleControl.pocet == 20)
             {
+                StartCoroutine(PapyrusAnim());
+
                 if (alpha >= 1f)
                 {
                     //alpha = 1f;
@@ -185,7 +186,8 @@ public class PuzzleScript : MonoBehaviour {
             wintext.SetActive(true);
             PuzzleControl.pocet = 0;
             PuzzleControl.RandomPomocnePole = new List<int>(new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 });
-            StartCoroutine(NacitajScenu());          
+            StartCoroutine(NacitajScenu());
+            StopCoroutine(NacitajScenu());
         }
 
         else
@@ -202,5 +204,16 @@ public class PuzzleScript : MonoBehaviour {
         transitionAnim.SetTrigger("Clouds");
         yield return new WaitForSeconds(3f);
         SceneManager.LoadScene("Mapa");
+    }
+
+    //pozastavenie kodu na 3 sekundy pred prepnutim na dalsiu scenu
+    IEnumerator PapyrusAnim()
+    {
+        yield return new WaitForSeconds(0.8f);
+        Papyrus.SetTrigger("Paper_fall");
+        yield return new WaitForSeconds(0.42f);
+        Dust.SetTrigger("Smoke");
+        yield return new WaitForSeconds(1.1f);
+        Papyrus.SetTrigger("Paper_roll");
     }
 }
