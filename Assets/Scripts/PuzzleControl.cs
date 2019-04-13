@@ -76,7 +76,7 @@ public class PuzzleControl : MonoBehaviour {
             {
                 pocet++;
                 PuzzleArray[1,polohavpoly]="1";
-            }       
+            }
         }
         else
         {
@@ -93,7 +93,7 @@ public class PuzzleControl : MonoBehaviour {
             if (i < 10)
             {
                 PuzzleArray[0, i - 1] = "0" + i;  // meno
-                PuzzleArray[1, i - 1] = "0";            // loked or not
+                PuzzleArray[1, i - 1] = "0";      // loked or not
             }
             else
             {

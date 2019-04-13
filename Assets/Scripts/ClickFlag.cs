@@ -7,6 +7,7 @@ public class ClickFlag : MonoBehaviour {
     //public LayerMask clickMask;
     public GameObject target;
     public static bool activePuk=false;
+    public static string NazovKraja = "";
 
 
     // Use this for initialization
@@ -23,6 +24,9 @@ public class ClickFlag : MonoBehaviour {
         {
             if (!ControlMap.locked)
             {
+                MenoCliknutehoKraja();
+                //Debug.Log(pocetkliknuty);
+
                 target.SetActive(true);
                 activePuk = true;
                 // Vector3 mousePos = Camera.main.ScreenToViewportPoint(Input.mousePosition);
@@ -32,4 +36,15 @@ public class ClickFlag : MonoBehaviour {
             }
         }
     }
+
+    public void MenoCliknutehoKraja()
+    {
+        Vector2 mousepos2D = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
+        RaycastHit2D hit = Physics2D.Raycast(mousepos2D, Vector2.zero, 3.5f);
+        //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        if (hit)
+            NazovKraja = hit.transform.gameObject.name;
+    }
+
 }

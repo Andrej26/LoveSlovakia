@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Puzzle.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: Assets/Scenes/Showing.unity
+    path: Assets/Scenes/Unhide.unity
     guid: ab93df7076da4824ca33c95c5833a149
   - enabled: 1
     path: Assets/Scenes/FillUp.unity

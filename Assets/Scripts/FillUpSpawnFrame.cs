@@ -10,7 +10,7 @@ public class FillUpSpawnFrame : MonoBehaviour {
     private float widthBR = 0;
     private float widthSR = 0;
     private float heightSR = 0;
-    private int pocetPimenok;
+    private int pocetPimenok = 0;
     private float rozostup = 0.2f;
 
     // Use this for initialization
@@ -25,6 +25,7 @@ public class FillUpSpawnFrame : MonoBehaviour {
     void SpawnObject()
     {
         pocetPimenok = FillUpSpawnLetters.NazovBezMedzier.Length;
+        //Debug.Log(FrameSuradnice.);
         FrameSuradnice = new float[pocetPimenok, 3];
 
         float pomocnaX;
@@ -52,7 +53,7 @@ public class FillUpSpawnFrame : MonoBehaviour {
             kolkoriadkov = 2;
             aktualY = aktualY + (heightSR / 2) + (rozostup / 2);
             pomocnyPocet = FillUpSpawnLetters.miestoMedzery;
-            Debug.Log(FillUpSpawnLetters.miestoMedzery);
+            //Debug.Log(FillUpSpawnLetters.miestoMedzery);
         }
 
         for (int j = 0; j < kolkoriadkov; j++)

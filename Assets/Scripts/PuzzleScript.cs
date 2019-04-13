@@ -27,27 +27,45 @@ public class PuzzleScript : MonoBehaviour {
     private GameObject moznostE;
     [SerializeField]
     private GameObject moznostF;
+    public GameObject Table;
+    public GameObject TextTable;
 
-    [SerializeField]
-    private Animator transitionAnim;
+    public GameObject VyskakovacieOkno;
+    private int PocetChyb;
+    public GameObject[] Hviezdy;
+    public AudioClip StarCink;
+    public AudioClip Fanfara;
+    public AudioClip KO;
+    public GameObject[] VsetkyButtony;
+
     [SerializeField]
     private Animator Dust;
     [SerializeField]
     private Animator Papyrus;
 
+    public AudioClip paperFall;
+    public AudioClip paperRoll;
 
     private string[] RandomMoznosti = new string[6];
     private string[] MenaButtonov = new string[6] { "MoznostA", "MoznostB", "MoznostC", "MoznostD", "MoznostE", "MoznostF" };
     private string VyhernyButton;
     private List<int> RandomPozicia = new List<int>(new int[] { 0, 1, 2, 3, 4, 5 });
 
-    private float alpha=0,stop=0;
-    private bool druha=false;
-    //private int lenraz = 0;
 
+    private float alpha = 0, stop = 0;
+    private bool druha = false;
+    private int prehratraz;
+    private UndyingCanvasScrip und;
 
     // Use this for initialization
-    void Start () {
+    void Start() {
+        und = FindObjectOfType(typeof(UndyingCanvasScrip)) as UndyingCanvasScrip;
+        StartCoroutine(PredelAnim());
+        prehratraz = 1;
+        Table.SetActive(false);
+        TextTable.SetActive(false);
+        VyskakovacieOkno.SetActive(false);
+        PocetChyb = 0;
 
         VsetkyMoznosti.SetActive(false);
         wintext.SetActive(false);
@@ -57,7 +75,7 @@ public class PuzzleScript : MonoBehaviour {
         GameObject.Find(MainMenu.Cesta).GetComponent<SpriteRenderer>().enabled = true;
         GameObject.Find(MainMenu.Cesta).GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, 0f);
 
-        RandomPoleMoznosti();      
+        RandomPoleMoznosti();
     }
 
     // Update is called once per frame
@@ -71,8 +89,8 @@ public class PuzzleScript : MonoBehaviour {
                 otazka.GetComponent<CanvasRenderer>().SetAlpha(alpha);
 
                 if (stop >= 1) // chvilkove pozastavenie pred nacitanim textu
-                {           
-                    moznostA.GetComponentInChildren<TextMeshProUGUI>().text= RandomMoznosti[0];
+                {
+                    moznostA.GetComponentInChildren<TextMeshProUGUI>().text = RandomMoznosti[0];
                     moznostB.GetComponentInChildren<TextMeshProUGUI>().text = RandomMoznosti[1];
                     moznostC.GetComponentInChildren<TextMeshProUGUI>().text = RandomMoznosti[2];
                     moznostD.GetComponentInChildren<TextMeshProUGUI>().text = RandomMoznosti[3];
@@ -83,7 +101,7 @@ public class PuzzleScript : MonoBehaviour {
                 else
                 {
                     stop = Time.deltaTime * 0.9f + stop;
-                }   
+                }
             }
             else
             {
@@ -96,7 +114,10 @@ public class PuzzleScript : MonoBehaviour {
         {
             if (PuzzleControl.pocet == 20)
             {
-                StartCoroutine(PapyrusAnim());
+                if (prehratraz == 1) {
+                    StartCoroutine(PapyrusAnim());
+                    prehratraz = 0;
+                }
 
                 if (alpha >= 1f)
                 {
@@ -124,7 +145,7 @@ public class PuzzleScript : MonoBehaviour {
                 }
             }
         }
-	}
+    }
 
 
     public void GoToMainMenu()
@@ -138,7 +159,7 @@ public class PuzzleScript : MonoBehaviour {
     private void RandomPoleMoznosti()
     {
         int randpozicia = RandomPozicia[Random.Range(0, RandomPozicia.Count)];
-        int randnazov = Random.Range(0, MainMenu.PuzzleVyber.Length / 4);
+        int randnazov = Random.Range(0, MainMenu.PuzzleVyber.Length / 7);
 
         if (RandomPozicia.Count.Equals(6))
         {
@@ -170,7 +191,7 @@ public class PuzzleScript : MonoBehaviour {
                     RandomPozicia.Remove(randpozicia);
                     RandomPoleMoznosti();
                 }
-                
+
             }
         }
     }
@@ -186,34 +207,121 @@ public class PuzzleScript : MonoBehaviour {
             wintext.SetActive(true);
             PuzzleControl.pocet = 0;
             PuzzleControl.RandomPomocnePole = new List<int>(new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 });
-            StartCoroutine(NacitajScenu());
-            StopCoroutine(NacitajScenu());
+            StartCoroutine(NacitanieHviezd());
+            StopCoroutine(NacitanieHviezd());
         }
 
         else
         {
-            mojbuton.GetComponent<Image>().color = Color.red;
-            losetext.SetActive(true);
+            ++PocetChyb;
+            if (PocetChyb <= 2)
+            {
+                mojbuton.GetComponent<Image>().color = Color.red;
+                losetext.SetActive(true);
+            }
+            else
+            {
+                losetext.SetActive(true);
+                VratVyhernyButton(VyhernyButton);
+                PuzzleControl.pocet = 0;
+                PuzzleControl.RandomPomocnePole = new List<int>(new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 });
+                StartCoroutine(NacitanieHviezd());
+                StopCoroutine(NacitanieHviezd());
+            }
         }
     }
 
+    public void NacitajNovuScenu()
+    {
+        SoundManager.StarPinch = 0.95f;
+        StartCoroutine(NacitajScenu());
+    }
+
+
     //pozastavenie kodu na 3 sekundy pred prepnutim na dalsiu scenu
+    IEnumerator NacitanieHviezd()
+    {
+        int pocetHviezd = 0;
+        yield return new WaitForSeconds(0.5f);
+        Table.SetActive(true);
+        TextTable.GetComponentInChildren<TextMeshProUGUI>().text = MainMenu.NazovPamiatky;
+        TextTable.SetActive(true);
+        yield return new WaitForSeconds(3f);
+        VyskakovacieOkno.SetActive(true);
+        switch (PocetChyb)
+        {
+            case 0:
+                pocetHviezd = 3;
+                break;
+            case 1:
+                pocetHviezd = 2;
+                break;
+            case 2:
+                pocetHviezd = 1;
+                break;
+            default:
+                pocetHviezd = 0;
+                break;
+        }
+
+        for (int i=0;pocetHviezd>i;i++)
+        {
+            yield return new WaitForSeconds(0.6f);
+            Hviezdy[i].SetActive(true);
+            SoundManager.instance.PlaySingleStar(StarCink);
+            //yield return new WaitForSeconds(0.2f);
+        }
+        MainMenu.PocetZiskanychHviezd = MainMenu.PocetZiskanychHviezd + pocetHviezd;
+        Debug.Log(MainMenu.PocetZiskanychHviezd);
+
+        if(pocetHviezd.Equals(3))
+            SoundManager.instance.PlaySingle(Fanfara);
+        if(pocetHviezd.Equals(0))
+            SoundManager.instance.PlaySingle(KO);
+    }
+
+    private void VratVyhernyButton(string menovyherneho)
+    {
+        for (int i=0;VsetkyButtony.Length>i;i++)
+        {
+            if (VsetkyButtony[i].name == VyhernyButton) {
+                VsetkyButtony[i].GetComponent<Image>().color = Color.green;
+                losetext.GetComponentInChildren<TextMeshProUGUI>().text = "Neuhádol si. <sprite=15> Správna odpoveď je:" + VsetkyButtony[i].GetComponentInChildren<TextMeshProUGUI>().text;
+            }
+        }
+    }
+
     IEnumerator NacitajScenu()
     {
-        yield return new WaitForSeconds(0.5f);
-        transitionAnim.SetTrigger("Clouds");
-        yield return new WaitForSeconds(3f);
+        und.PredelPrepinanie(true);
+        und.ZmenaPredelu(4);
+        yield return new WaitForSeconds(1f);
+        und.ZmenaAnimPredelov(1);
+        yield return new WaitForSeconds(3.5f);
         SceneManager.LoadScene("Mapa");
     }
 
-    //pozastavenie kodu na 3 sekundy pred prepnutim na dalsiu scenu
-    IEnumerator PapyrusAnim()
+        //pozastavenie kodu na 3 sekundy pred prepnutim na dalsiu scenu
+        IEnumerator PapyrusAnim()
     {
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(1f);
         Papyrus.SetTrigger("Paper_fall");
-        yield return new WaitForSeconds(0.42f);
+        yield return new WaitForSeconds(0.5f);
+        SoundManager.instance.PlaySingle(paperFall);
         Dust.SetTrigger("Smoke");
         yield return new WaitForSeconds(1.1f);
+        SoundManager.instance.PlaySingle(paperRoll);
         Papyrus.SetTrigger("Paper_roll");
+    }
+
+    IEnumerator PredelAnim()
+    {
+        //und.ZmenaPredelu(1);
+        und.ZmenaAnimPredelov(2);
+        yield return new WaitForSeconds(1f);
+        und.ZmenaAnimPredelov(3);
+        yield return new WaitForSeconds(3.5f);
+        und.ZmenaAnimPredelov(4);
+        und.PredelPrepinanie(false);
     }
 }

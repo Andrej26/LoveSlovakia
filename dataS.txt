@@ -1,6 +1,15 @@
-Baladice,0,-5.7,-2.3
-Banská Štiavnica,0,-3.4,-1.8
-Beckov,1,-7.4,0.4
-Betliar,1,3.5,-0.5
-Bojnice,0,-4.5,0.4
-Bratislava,1,-10.6,-3.5
+Beladice,0,-7.3,-3.3,Kaštieľ Beladice,NR,0
+Banská Štiavnica,1,-4.0,-2.7,Zámok s Kalváriou,BB,5
+Beckov,1,-8.9,0.3,Hrad Beckov,TRE,0
+Betliar,0,4.6,-1.2,Kaštieľ v Betliari,KO,0
+Bojnice,0,-5.3,-0.3,Bojnický zámok,TRE,0
+Bratislava,0,-13.2,-5.2,Bratislavský hrad,BA,0
+Budmerice,0,-12.3,-3.7,Kaštieľ Budmerice,BA,0
+Bytča,1,-4.9,3.5,Renesančný Palác v Bytči,ŽI,3
+Košice,0,8.9,-1.3,Dóm sv. Alžbety,KO,0
+Markušovce,0,5.4,0.6,Kaštieľ Markušovce,KO,0
+Nitra,0,-8.2,-3.8,Nitriansky hrad,NR,0
+Oravský Podzámok,0,-2.2,3.0,Oravský hrad,ŽI,0
+Smolenice,1,-11.7,-2.2,Smolenický zámok,TRN,3
+Čičmany,0,-5.7,1.2,Čičmianske drevenice,ŽI,0
+Trenčín,0,-8.5,0.6,Trenčiansky hrad,TRE,0
